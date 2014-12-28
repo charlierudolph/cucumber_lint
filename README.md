@@ -1,5 +1,6 @@
 # cucumber_lint
 [![Dependency Status](https://gemnasium.com/charlierudolph/cucumber_lint.svg)](https://gemnasium.com/charlierudolph/cucumber_lint)
+[![Code Climate](https://codeclimate.com/github/charlierudolph/cucumber_lint/badges/gpa.svg)](https://codeclimate.com/github/charlierudolph/cucumber_lint)
 
 A command line linter and formatter for cucumber features
 
