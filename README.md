@@ -1,4 +1,5 @@
 # cucumber_lint
+[![Gem Version](https://badge.fury.io/rb/cucumber_lint.svg)](http://badge.fury.io/rb/cucumber_lint)
 [![Dependency Status](https://gemnasium.com/charlierudolph/cucumber_lint.svg)](https://gemnasium.com/charlierudolph/cucumber_lint)
 [![Code Climate](https://codeclimate.com/github/charlierudolph/cucumber_lint/badges/gpa.svg)](https://codeclimate.com/github/charlierudolph/cucumber_lint)
 
