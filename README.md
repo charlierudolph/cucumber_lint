@@ -39,7 +39,7 @@ Good
 | row1_column1   | row1_column2   |
 | row2_column1   | row2_column2   |
 | row3_column1   | row3_column2   |
-
+```
 
 ### Steps
 * Use `And` instead of repeating `Given`, `When`, or `Then`
