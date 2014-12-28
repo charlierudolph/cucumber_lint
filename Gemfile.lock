@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cucumber_lint (0.0.1)
+    cucumber_lint (0.0.3)
       colorize (~> 0.7.5)
 
 GEM
@@ -55,9 +55,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  cucumber
+  cucumber (~> 1.3.18)
   cucumber_lint!
-  open4
-  rake
-  rspec
-  rubocop
+  open4 (~> 1.3.4)
+  rake (~> 10.4.2)
+  rspec (~> 3.1.0)
+  rubocop (~> 0.28.0)

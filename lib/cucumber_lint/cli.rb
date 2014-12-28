@@ -58,7 +58,7 @@ module CucumberLint
 
 
     def output_failures
-      @out.puts "\n\nFiles with unformmated tables:".red
+      @out.puts "\n\nFiles with errors:".red
       @out.print @results.unformatted_files.join("\n").red
     end
 

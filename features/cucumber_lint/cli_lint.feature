@@ -31,7 +31,7 @@ Feature: cli lint
       """
       F
 
-      Files with unformmated tables:
+      Files with errors:
       ./features/unformatted.feature
 
       1 file inspected (0 passed, 1 failed)
@@ -47,7 +47,7 @@ Feature: cli lint
       """
       .F
 
-      Files with unformmated tables:
+      Files with errors:
       ./features/unformatted.feature
 
       2 files inspected (1 passed, 1 failed)
