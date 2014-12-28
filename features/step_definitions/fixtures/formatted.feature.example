@@ -1,0 +1,9 @@
+Feature: Test Feature
+
+  Scenario: Test Scenario
+    Given a table
+      | header_column1 | header_column2 |
+      | row1_column1   | row1_column2   |
+      | row2_column1   | row2_column2   |
+      | row3_column1   | row3_column2   |
+    Then my tests pass

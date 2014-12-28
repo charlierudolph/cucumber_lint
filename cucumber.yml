@@ -1,0 +1,3 @@
+<% common = "-r features/step_definitions --strict" %>
+
+default: <%= common %>
