@@ -1,4 +1,5 @@
 # cucumber_lint
+[![Dependency Status](https://gemnasium.com/charlierudolph/cucumber_lint.svg)](https://gemnasium.com/charlierudolph/cucumber_lint)
 
 A command line linter and formatter for cucumber features
 
