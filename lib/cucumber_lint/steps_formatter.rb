@@ -26,7 +26,7 @@ module CucumberLint
 
 
     def format_line line
-      @previous_step_type = nil if should_reset_previous_step_type? line
+      @previous_step_type = nil if should_reset_previous_step_type? line.lstrip
 
       step_type = line.split(' ', -1)[0]
 
