@@ -19,7 +19,7 @@ module CucumberLint
 
 
     def execute!
-      Dir.glob('./features/**/*.feature').each do |filename|
+      Dir.glob('./features/**/*.feature').sort.each do |filename|
         formatter = FeatureFormatter.new IO.read(filename)
 
         if formatter.formatted?
