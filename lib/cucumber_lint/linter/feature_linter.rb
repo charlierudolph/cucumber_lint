@@ -34,8 +34,9 @@ module CucumberLint
       feature.elements.each do |element|
         lint_steps element.steps
 
-        (element.examples || []).each do |example|
-          lint_table example.rows
+        if element.type == 'scenario_outline'
+          lint_scenario_outline element.steps
+          lint_examples element.examples
         end
       end
 
@@ -50,15 +51,31 @@ module CucumberLint
     private
 
 
+    def linter_options
+      { file_lines: @file_lines, fix: @fix, parent: self }
+    end
+
+
+    def lint_examples examples
+      examples.each { |example| lint_table example.rows }
+    end
+
+
+    def lint_scenario_outline steps
+      linter = ScenarioOutlineLinter.new linter_options.merge(steps: steps)
+      linter.lint
+    end
+
+
     def lint_steps steps
-      steps_linter = StepsLinter.new steps: steps, file_lines: @file_lines, fix: @fix, parent: self
-      steps_linter.lint
+      linter = StepsLinter.new linter_options.merge(steps: steps)
+      linter.lint
     end
 
 
     def lint_table rows
-      table_linter = TableLinter.new rows: rows, file_lines: @file_lines, fix: @fix, parent: self
-      table_linter.lint
+      linter = TableLinter.new linter_options.merge(rows: rows)
+      linter.lint
     end
 
 

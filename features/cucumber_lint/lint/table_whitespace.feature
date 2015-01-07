@@ -1,7 +1,7 @@
 Feature: linting
 
-  Scenario: a feature with table whitespace
-    Given I have a feature with table whitespace
+  Scenario: a feature with unformatted table whitespace
+    Given I have a feature with unformatted table whitespace
     When I run `cucumber_lint`
     Then I see the output
       """

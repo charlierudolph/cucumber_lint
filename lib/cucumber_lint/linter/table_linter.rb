@@ -14,10 +14,20 @@ module CucumberLint
 
     def lint
       bad_whitespace unless actual_table_lines == expected_table_lines
+      bad_table_headers unless actual_table_lines[0] == actual_table_lines[0].upcase
     end
 
 
     private
+
+
+    def bad_table_headers
+      if @fix
+        fix_list.add @rows[0].line, -> (line) { line.upcase }
+      else
+        errors << "#{@rows[0].line}: Make table headers uppercase"
+      end
+    end
 
 
     def actual_table_lines

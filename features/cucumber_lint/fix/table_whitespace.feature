@@ -1,7 +1,7 @@
 Feature: fixing
 
-  Scenario: a feature with table whitespace
-    Given I have a feature with table whitespace
+  Scenario: a feature with unformatted table whitespace
+    Given I have a feature with unformatted table whitespace
     When I run `cucumber_lint --fix`
     Then I see the output
       """
@@ -10,7 +10,7 @@ Feature: fixing
       1 file inspected (0 passed, 1 written)
       """
     And it exits with status 0
-    And the feature with table whitespace is now formatted
+    And I now have a feature with formatted table whitespace
 
 
   Scenario: a feature with formatted table whitespace

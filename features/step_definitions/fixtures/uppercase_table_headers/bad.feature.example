@@ -2,7 +2,7 @@ Feature: Test Feature
 
   Scenario: Test Scenario
     Given a table
-      | VEGETABLE | CODENAME |
+      | vegetable | codename |
       | Asparagus | Alpha    |
       | Broccoli  | Bravo    |
       | Carrot    | Charlie  |
@@ -10,11 +10,11 @@ Feature: Test Feature
 
 
   Scenario Outline: Test Scenario Outline
-    Given <VEGETABLE> and <FRUIT>
-    Then I expect <CODENAME>
+    Given <vegetable> and <fruit>
+    Then I expect <codename>
 
     Examples:
-      | VEGETABLE | FRUIT  | CODENAME |
+      | vegetable | fruit  | codename |
       | Asparagus | Apple  | Alpha    |
       | Broccoli  | Banana | Bravo    |
       | Carrot    | Cherry | Charlie  |

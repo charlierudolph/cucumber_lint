@@ -1,7 +1,7 @@
 Feature: linting
 
-  Scenario: a feature with repeating steps
-    Given I have a feature with repeating steps
+  Scenario: a feature with unformatted repeating steps
+    Given I have a feature with unformatted repeating steps
     When I run `cucumber_lint`
     Then I see the output
       """

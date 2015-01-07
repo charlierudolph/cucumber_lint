@@ -1,7 +1,7 @@
 Feature: fixing
 
-  Scenario: a feature with unformatted repeating steps
-    Given I have a feature with unformatted repeating steps
+  Scenario: a feature with unformatted uppercase table headers
+    Given I have a feature with unformatted uppercase table headers
     When I run `cucumber_lint --fix`
     Then I see the output
       """
@@ -10,11 +10,11 @@ Feature: fixing
       1 file inspected (0 passed, 1 written)
       """
     And it exits with status 0
-    And I now have a feature with formatted repeating steps
+    And I now have a feature with formatted uppercase table headers
 
 
-  Scenario: a feature with formatted repeating steps
-    Given I have a feature with formatted repeating steps
+  Scenario: a feature with formatted uppercase table headers
+    Given I have a feature with formatted uppercase table headers
     When I run `cucumber_lint --fix`
     Then I see the output
       """

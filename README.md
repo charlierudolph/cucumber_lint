@@ -19,48 +19,32 @@ cucumber_lint        # Lints (exits with status 1 on failure, 0 on success)
 cucumber_lint --fix  # Fixes all lint errors
 ```
 
-### Tables
-* requires at a space leading and trailing cell content
-* requires pipes to be aligned
+### Features
 
-Bad
-````
-|header_column1|header_column2|
-|row1_column1|row1_column2|
-|row2_column1|row2_column2|
-|row3_column1|row3_column2|
-```
-Bad
-```
-| header_column1 | header_column2      |
-| row1_column1 | row1_column2           |
-| row2_column1      | row2_column2    |
-  | row3_column1 | row3_column2      |
-```
-Good
-```
-| header_column1 | header_column2 |
-| row1_column1   | row1_column2   |
-| row2_column1   | row2_column2   |
-| row3_column1   | row3_column2   |
-```
-
-### Steps
+#### Repeating step keywords
 * Use `And` instead of repeating `Given`, `When`, or `Then`
 
-Bad
+```coffee
+# Bad            # Good
+Given A          Given A
+Given B          And B
+When C           When C
+Then D           Then D
+Then E           And E
 ```
-Given A
-Given B
-When C
-Then D
-Then E
+
+#### Table whitespace
+* requires leading and trailing space around the cell content
+* requires pipes to be aligned
+
+
+```coffee
+# Bad                         # Bad                                  # Good
+|VEGETABLE|CODENAME|          | VEGETABLE | CODENAME      |          | VEGETABLE | CODENAME |
+|Asparagus|Alpha|             |Asparagus | Alpha   |                 | Asparagus | Alpha    |
+|Broccoli|Bravo|              |Broccoli      | Bravo    |            | Broccoli  | Bravo    |
+|Carrot|Charlie|              |  Carrot| Charlie      |              | Carrot    | Charlie  |
 ```
-Good
-```
-Given A
-And B
-When C
-Then D
-And E
-```
+
+#### Table headers and scenario outline placeholders
+* required to be uppercase
