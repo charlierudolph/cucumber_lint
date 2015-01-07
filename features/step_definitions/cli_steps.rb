@@ -3,9 +3,11 @@ Given(/^I have no files$/) do
 end
 
 
-Given(/^I have an? (.+?) file at "features\/(.+?)"$/) do |filetype, filename|
-  content = IO.read("#{FIXTURES_PATH}/#{filetype}.feature.example")
-  IO.write "#{TMP_DIR}/features/#{filename}", content
+Given(/^I have a feature with( formatted)? (.+?)$/) do |formatted, feature_type|
+  feature_name = formatted ? 'good' : 'bad'
+  feature_type.gsub!(' ', '_')
+  content = IO.read("#{FIXTURES_PATH}/#{feature_type}/#{feature_name}.feature.example")
+  IO.write "#{TMP_DIR}/features/#{feature_type}.feature", content
 end
 
 
@@ -24,8 +26,9 @@ Then(/^it exits with status (\d+)$/) do |status|
 end
 
 
-Then(/^the file "features\/(.+?)" in now formatted$/) do |filename|
-  expected = IO.read "#{FIXTURES_PATH}/formatted.feature.example"
-  actual = IO.read "#{TMP_DIR}/features/#{filename}"
+Then(/^the feature with (.+?) is now formatted$/) do |feature_type|
+  feature_type.gsub!(' ', '_')
+  expected = IO.read("#{FIXTURES_PATH}/#{feature_type}/good.feature.example")
+  actual = IO.read "#{TMP_DIR}/features/#{feature_type}.feature"
   expect(actual).to eql expected
 end

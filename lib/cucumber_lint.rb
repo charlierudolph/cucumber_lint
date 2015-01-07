@@ -1,7 +1,9 @@
 require 'cucumber_lint/cli'
-require 'cucumber_lint/feature_formatter'
-require 'cucumber_lint/table_formatter'
-require 'cucumber_lint/steps_formatter'
+require 'cucumber_lint/fix_list'
+require 'cucumber_lint/linter'
+require 'cucumber_lint/linter/feature_linter'
+require 'cucumber_lint/linter/steps_linter'
+require 'cucumber_lint/linter/table_linter'
 
 module CucumberLint
 end

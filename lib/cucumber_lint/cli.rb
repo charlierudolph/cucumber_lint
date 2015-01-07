@@ -13,72 +13,84 @@ module CucumberLint
 
     def initialize args, out: STDOUT
       @out = out
-      @lint = args[0] != '--fix'
-      @results = OpenStruct.new(formatted: 0, unformatted: 0, unformatted_files: [])
+      @fix = args[0] == '--fix'
+      @results = OpenStruct.new(total: 0, passed: 0, failed: 0, written: 0, errors: [])
     end
 
 
     def execute!
       Dir.glob('./features/**/*.feature').sort.each do |filename|
-        formatter = FeatureFormatter.new IO.read(filename)
-
-        if formatter.formatted?
-          file_formatted
-        else
-          file_unformatted filename, formatter.formatted_content
-        end
+        lint_feature filename
       end
 
       output_results
-      exit 1 unless @results.unformatted_files.empty?
+      exit 1 unless @results.errors.empty?
     end
+
+    private
+
+    def lint_feature filename
+      linter = FeatureLinter.new filename, fix: @fix
+      linter.lint
+
+      if linter.errors?
+        @results.errors += linter.errors
+        file_failed
+      elsif linter.can_fix?
+        file_written
+      else
+        file_passed
+      end
+
+      linter.write if linter.can_fix?
+    end
+
+    def file_counts
+      out = ["#{@results.passed} passed".green]
+      out << "#{@results.written} written".yellow if @results.written > 0
+      out << "#{@results.failed} failed".red if @results.failed > 0
+      "(#{out.join(', ')})"
+    end
+
+
+    def output_errors
+      @out.print "\n\n"
+      @out.print @results.errors.join("\n").red
+    end
+
+
+    def output_counts
+      @out.print "\n\n"
+      @out.print "#{@results.total} file#{'s' if @results.total != 1} inspected"
+      @out.print " #{file_counts}" if @results.total > 0
+      @out.print "\n"
+    end
+
 
     def output_results
-      output_failures if @lint && !@results.unformatted_files.empty?
-      total = @results.formatted + @results.unformatted
-      @out.print "\n\n#{total} file#{'s' if total != 1} inspected ("
-      if @lint
-        output_inspect_results
-      else
-        output_write_results
-      end
-      @out.puts ')'
+      output_errors unless @results.errors.empty?
+      output_counts
     end
 
 
-    def output_inspect_results
-      @out.print "#{@results.formatted} passed".green
-      @out.print ', ' + "#{@results.unformatted} failed".red if @results.unformatted > 0
-    end
-
-
-    def output_write_results
-      @out.print "#{@results.unformatted} written".yellow
-    end
-
-
-    def output_failures
-      @out.puts "\n\nFiles with errors:".red
-      @out.print @results.unformatted_files.join("\n").red
-    end
-
-
-    def file_formatted
-      @results.formatted += 1
+    def file_passed
+      @results.total += 1
+      @results.passed += 1
       @out.print '.'.green
     end
 
 
-    def file_unformatted filename, content
-      @results.unformatted += 1
+    def file_failed
+      @results.total += 1
+      @results.failed += 1
+      @out.print 'F'.red
+    end
 
-      if @lint
-        @results.unformatted_files << filename
-        @out.print 'F'.red
-      else
-        IO.write filename, content
-        @out.print 'W'.yellow
-      end
+
+    def file_written
+      @results.total += 1
+      @results.written += 1
+      @out.print 'W'.yellow
     end
 
   end

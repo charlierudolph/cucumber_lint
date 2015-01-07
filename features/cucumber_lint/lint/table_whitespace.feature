@@ -1,0 +1,27 @@
+Feature: linting
+
+  Scenario: a feature with table whitespace
+    Given I have a feature with table whitespace
+    When I run `cucumber_lint`
+    Then I see the output
+      """
+      F
+
+      ./features/table_whitespace.feature:5: Fix table whitespace
+      ./features/table_whitespace.feature:17: Fix table whitespace
+
+      1 file inspected (0 passed, 1 failed)
+      """
+    And it exits with status 1
+
+
+  Scenario: a feature with formatted table whitespace
+    Given I have a feature with formatted table whitespace
+    When I run `cucumber_lint`
+    Then I see the output
+      """
+      .
+
+      1 file inspected (1 passed)
+      """
+    And it exits with status 0

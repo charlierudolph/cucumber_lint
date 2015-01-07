@@ -1,13 +1,15 @@
+AllCops:
+  Exclude:
+    - lib/cucumber_lint.rb
+    - lib/cucumber_lint/version.rb
+
+
 Metrics/LineLength:
   Max: 100
 
 
 Metrics/MethodLength:
   Max: 11
-
-
-Style/Documentation:
-  Enabled: false
 
 
 Style/EmptyLines:

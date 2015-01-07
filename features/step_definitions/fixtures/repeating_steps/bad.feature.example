@@ -1,0 +1,12 @@
+Feature: Test Feature
+
+  Scenario: Test Scenario
+    Given A
+    Given B
+    Given C
+    When D
+    When E
+    When F
+    Then G
+    Then H
+    Then I

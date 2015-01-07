@@ -13,12 +13,8 @@ Gem::Specification.new do |spec|
   spec.license       = 'MIT'
 
   spec.add_runtime_dependency 'colorize', '~> 0.7.5'
-
-  spec.add_development_dependency 'cucumber', '~> 1.3.18'
-  spec.add_development_dependency 'open4', '~> 1.3.4'
-  spec.add_development_dependency 'rake', '~> 10.4.2'
-  spec.add_development_dependency 'rspec', '~> 3.1.0'
-  spec.add_development_dependency 'rubocop', '~> 0.28.0'
+  spec.add_runtime_dependency 'gherkin', '~> 2.12.2'
+  spec.add_runtime_dependency 'multi_json', '~> 1.10.1'
 
   spec.files         = `git ls-files`.split("\n")
   spec.executables   = spec.files.grep(/^bin\//) { |f| File.basename(f) }
