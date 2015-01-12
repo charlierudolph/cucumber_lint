@@ -9,8 +9,8 @@ module CucumberLint
 
     attr_reader :errors, :fix_list
 
-    def initialize path, fix:
-      super(fix: fix)
+    def initialize path, config:
+      super(config: config)
 
       @path = path
       @content = IO.read(path)
@@ -52,7 +52,7 @@ module CucumberLint
 
 
     def linter_options
-      { file_lines: @file_lines, fix: @fix, parent: self }
+      { config: @config, file_lines: @file_lines, parent: self }
     end
 
 

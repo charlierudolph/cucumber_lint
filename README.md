@@ -19,18 +19,28 @@ cucumber_lint        # Lints (exits with status 1 on failure, 0 on success)
 cucumber_lint --fix  # Fixes all lint errors
 ```
 
+### Configuration
+
+Create a `cucumber_lint.yml` file in the same folder that contains your `features` directory.
+Override the [default config](./config/default.yml) by setting the key to one of the supported styles.
+
+```yml
+# cucumber_lint.yml
+table_headers: lowercase
+```
+
 ### Features
 
 #### Repeating step keywords
 * Use `And` instead of repeating `Given`, `When`, or `Then`
 
 ```coffee
-# Bad            # Good
-Given A          Given A
-Given B          And B
-When C           When C
-Then D           Then D
-Then E           And E
+# Bad         # Good
+Given A       Given A
+Given B       And B
+When C        When C
+Then D        Then D
+Then E        And E
 ```
 
 #### Table whitespace
@@ -39,12 +49,12 @@ Then E           And E
 
 
 ```coffee
-# Bad                         # Bad                                  # Good
-|VEGETABLE|CODENAME|          | VEGETABLE | CODENAME      |          | VEGETABLE | CODENAME |
-|Asparagus|Alpha|             |Asparagus | Alpha   |                 | Asparagus | Alpha    |
-|Broccoli|Bravo|              |Broccoli      | Bravo    |            | Broccoli  | Bravo    |
-|Carrot|Charlie|              |  Carrot| Charlie      |              | Carrot    | Charlie  |
+# Bad                      # Bad                               # Good
+|VEGETABLE|CODENAME|       | VEGETABLE | CODENAME      |       | VEGETABLE | CODENAME |
+|Asparagus|Alpha|          |Asparagus | Alpha   |              | Asparagus | Alpha    |
+|Broccoli|Bravo|           |Broccoli      | Bravo    |         | Broccoli  | Bravo    |
+|Carrot|Charlie|           |  Carrot| Charlie      |           | Carrot    | Charlie  |
 ```
 
 #### Table headers and scenario outline placeholders
-* required to be uppercase
+* required to be uppercase by default (configure to require lowercase)

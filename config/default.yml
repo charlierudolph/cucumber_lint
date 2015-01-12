@@ -1,0 +1,5 @@
+table_headers:
+  enforced_style: uppercase
+  supported_styles:
+    - lowercase  # column header
+    - uppercase  # COLUMN HEADER

@@ -1,32 +1,40 @@
+require 'core_ext/string'
 require 'gherkin/formatter/pretty_formatter'
 
 module CucumberLint
   # A linter for a series of table rows (as parsed by Gherkin)
   class TableLinter < Linter
 
-    def initialize rows:, file_lines:, fix:, parent:
-      super(fix: fix, parent: parent)
+    def initialize rows:, file_lines:, config:, parent:
+      super config: config, parent: parent
 
       @rows = rows
       @file_lines = file_lines
+      @header_style = @config.table_headers.enforced_style.to_sym
     end
 
 
     def lint
       bad_whitespace unless actual_table_lines == expected_table_lines
-      bad_table_headers unless actual_table_lines[0] == actual_table_lines[0].upcase
+      report_bad_table_headers if bad_table_headers?
     end
 
 
     private
 
 
-    def bad_table_headers
-      if @fix
-        fix_list.add @rows[0].line, -> (line) { line.upcase }
+    def report_bad_table_headers
+      if @config.fix
+        fix_list.add @rows[0].line, -> (line) { line.split('|', -1).map(&@header_style).join('|') }
       else
-        errors << "#{@rows[0].line}: Make table headers uppercase"
+        errors << "#{@rows[0].line}: #{@header_style} table headers"
       end
+    end
+
+
+    def bad_table_headers?
+      headers = actual_table_lines[0].split('|')
+      headers != headers.map(&@header_style)
     end
 
 
@@ -36,7 +44,7 @@ module CucumberLint
 
 
     def bad_whitespace
-      if @fix
+      if @config.fix
         @rows.each_with_index.map do |row, index|
           fix_list.add row.line, -> (line) { line.gsub(/\|.+?\n/, expected_table_lines[index]) }
         end

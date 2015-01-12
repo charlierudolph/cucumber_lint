@@ -5,8 +5,8 @@ module CucumberLint
     attr_reader :errors, :fix_list
 
 
-    def initialize fix:, parent: nil
-      @fix = fix
+    def initialize config:, parent: nil
+      @config = config
 
       if parent
         @errors = parent.errors

@@ -13,7 +13,9 @@ module CucumberLint
 
     def initialize args, out: STDOUT
       @out = out
-      @fix = args[0] == '--fix'
+
+      opts = extract_args args
+      @config = load_config fix: opts[:fix]
       @results = OpenStruct.new(total: 0, passed: 0, failed: 0, written: 0, errors: [])
     end
 
@@ -30,7 +32,7 @@ module CucumberLint
     private
 
     def lint_feature filename
-      linter = FeatureLinter.new filename, fix: @fix
+      linter = FeatureLinter.new filename, config: @config
       linter.lint
 
       if linter.errors?
@@ -44,6 +46,29 @@ module CucumberLint
 
       linter.write if linter.can_fix?
     end
+
+
+    def load_config fix:
+      Config.new dir: Pathname.new('.').realpath, fix: fix
+    rescue UnsupportedStyle => e
+      @out.puts e.message.red
+      exit 1
+    end
+
+
+    def extract_args args
+      valid_args = ['--fix']
+
+      if (args - valid_args).empty?
+        { fix: args.count == 1 }
+      else
+        @out.puts "error: unsupported option(s): #{args.join(' ')}".red
+        @out.puts 'usage: cucumber_lint'
+        @out.puts '   or: cucumber_lint --fix'
+        exit 1
+      end
+    end
+
 
     def file_counts
       out = ["#{@results.passed} passed".green]

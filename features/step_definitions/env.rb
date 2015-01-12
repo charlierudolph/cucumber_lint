@@ -11,6 +11,7 @@ TMP_DIR = '/tmp'
 Before do
   Dir.chdir TMP_DIR
   FileUtils.rm_rf 'features'
+  FileUtils.rm_f 'cucumber_lint.yml'
   Dir.mkdir 'features'
 end
 
