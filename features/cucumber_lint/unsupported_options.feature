@@ -1,6 +1,6 @@
 Feature: unsupported option
 
-  Scenario: one unsupported option
+  Scenario: passing an unsupported option
     When I run `cucumber_lint --invalid`
     Then I see the output
       """

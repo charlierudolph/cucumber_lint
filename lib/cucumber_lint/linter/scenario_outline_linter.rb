@@ -8,14 +8,14 @@ module CucumberLint
       super config: config, linted_file: linted_file
 
       @steps = steps
-      @header_style = @config.table_headers.enforced_style.to_sym
+      @header_style = @config.consistent_table_headers.enforced_style.to_sym
     end
 
 
     def lint
       @steps.each do |step|
         step.name.scan(/<.+?>/).each do |placeholder|
-          report_bad_placeholder step.line, placeholder if bad_placeholder? placeholder
+          inconsistent_placeholder step.line, placeholder if bad_placeholder? placeholder
         end
       end
     end
@@ -29,7 +29,9 @@ module CucumberLint
     end
 
 
-    def report_bad_placeholder line_number, str
+    def inconsistent_placeholder line_number, str
+      return unless @config.consistent_table_headers.enabled
+
       if @config.fix
         add_fix line_number, -> (line) { line.sub(str, str.public_send(@header_style)) }
       else

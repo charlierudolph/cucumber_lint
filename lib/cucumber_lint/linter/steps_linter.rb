@@ -31,6 +31,8 @@ module CucumberLint
     STEP_TYPES = %w(Given When Then)
 
     def repeated_keyword line_number, keyword
+      return unless @config.no_repeating_keywords.enabled
+
       if @config.fix
         add_fix line_number, -> (line) { line.sub(keyword, 'And') }
       else

@@ -6,6 +6,22 @@ Given(/^I have no files$/) do
 end
 
 
+Given(/^I have (.+?) (enabled|disabled)$/) do |key, value|
+  config = YAML.load IO.read "#{TMP_DIR}/cucumber_lint.yml"
+  config[key]['enabled'] = value == 'enabled'
+  IO.write "#{TMP_DIR}/cucumber_lint.yml", config.to_yaml
+end
+
+
+Given(/^I have (.+?) enforcing (.+?)$/) do |key, value|
+  config = YAML.load IO.read "#{TMP_DIR}/cucumber_lint.yml"
+  config[key]['enabled'] = true
+  config[key]['enforced_style'] = value
+  IO.write "#{TMP_DIR}/cucumber_lint.yml", config.to_yaml
+end
+
+
+
 Given(/^I have configured (.+?) to enforce (.+?)$/) do |key, value|
   config = { key => value }
   IO.write "#{TMP_DIR}/cucumber_lint.yml", config.to_yaml
@@ -20,9 +36,14 @@ Given(/^I have a feature with (unformatted|formatted) (.+?)$/) do |format, type|
 end
 
 
-Given(/^I have a file with no features$/) do
+Given(/^I have a file without a feature$/) do
   IO.write "#{TMP_DIR}/features/test.feature", ''
 end
+
+Given(/^I have a feature with content$/) do |content|
+  IO.write "#{TMP_DIR}/features/test.feature", content
+end
+
 
 
 
@@ -48,6 +69,11 @@ Then(/^I now have a feature with formatted (.+?)$/) do |type|
   expected = IO.read("#{FIXTURES_PATH}/#{feature_type.join('/')}/good.feature.example")
   actual = IO.read "#{TMP_DIR}/features/test.feature"
   expect(actual).to eql expected
+end
+
+Then(/^my feature now has content$/) do |content|
+  actual = IO.read "#{TMP_DIR}/features/test.feature"
+  expect(actual).to eql content
 end
 
 

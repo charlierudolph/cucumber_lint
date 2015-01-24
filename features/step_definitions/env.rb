@@ -11,7 +11,7 @@ TMP_DIR = '/tmp'
 Before do
   Dir.chdir TMP_DIR
   FileUtils.rm_rf 'features'
-  FileUtils.rm_f 'cucumber_lint.yml'
+  IO.write 'cucumber_lint.yml', IO.read("#{FIXTURES_PATH}/config/disabled.yml")
   Dir.mkdir 'features'
 end
 

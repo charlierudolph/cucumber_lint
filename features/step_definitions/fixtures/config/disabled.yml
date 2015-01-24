@@ -1,5 +1,5 @@
 consistent_table_headers:
-  enabled: true
+  enabled: false
   enforced_style: uppercase
   supported_styles:
     - lowercase  # column header
@@ -7,12 +7,12 @@ consistent_table_headers:
 
 
 consistent_table_whitespace:
-  enabled: true
+  enabled: false
 
 
 no_empty_features:
-  enabled: true
+  enabled: false
 
 
 no_repeating_keywords:
-  enabled: true
+  enabled: false

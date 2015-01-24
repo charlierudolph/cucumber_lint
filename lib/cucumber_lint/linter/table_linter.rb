@@ -9,20 +9,22 @@ module CucumberLint
       super config: config, linted_file: linted_file
 
       @rows = rows
-      @header_style = @config.table_headers.enforced_style.to_sym
+      @header_style = @config.consistent_table_headers.enforced_style.to_sym
     end
 
 
     def lint
-      bad_whitespace unless actual_table_lines == expected_table_lines
-      report_bad_table_headers if bad_table_headers?
+      inconsistent_table_whitespace unless actual_table_lines == expected_table_lines
+      inconsistent_table_headers if inconsistent_table_headers?
     end
 
 
     private
 
 
-    def report_bad_table_headers
+    def inconsistent_table_headers
+      return unless @config.consistent_table_headers.enabled
+
       if @config.fix
         add_fix @rows[0].line, -> (line) { line.split('|', -1).map(&@header_style).join('|') }
       else
@@ -31,7 +33,7 @@ module CucumberLint
     end
 
 
-    def bad_table_headers?
+    def inconsistent_table_headers?
       headers = actual_table_lines[0].split('|')
       headers != headers.map(&@header_style)
     end
@@ -42,10 +44,12 @@ module CucumberLint
     end
 
 
-    def bad_whitespace
+    def inconsistent_table_whitespace
+      return unless @config.consistent_table_whitespace.enabled
+
       if @config.fix
         @rows.each_with_index.map do |row, index|
-          add_fix row.line, -> (line) { line.gsub(/\|.+?\n/, expected_table_lines[index]) }
+          add_fix row.line, -> (line) { line.gsub(/\|.*\|/, expected_table_lines[index]) }
         end
       else
         add_error "#{@rows[0].line}: Fix table whitespace"
@@ -54,7 +58,7 @@ module CucumberLint
 
 
     def determine_actual_table_lines
-      @rows.map { |row| @linted_file.lines[row.line - 1].lstrip }
+      @rows.map { |row| @linted_file.lines[row.line - 1].strip }
     end
 
 
@@ -65,7 +69,7 @@ module CucumberLint
       formatter = Gherkin::Formatter::PrettyFormatter.new(io, false, false)
       formatter.table(@rows)
       formatter.done
-      io.string.lines.map(&:lstrip)
+      io.string.lines.map(&:strip)
     end
 
 

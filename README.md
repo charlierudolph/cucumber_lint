@@ -22,43 +22,42 @@ cucumber_lint --fix  # Fixes all lint errors
 ### Configuration
 
 Create a `cucumber_lint.yml` file in the same folder that contains your `features` directory.
-Override the [default config](./config/default.yml) by setting the key to one of the supported styles.
+Override the [default config](./config/default.yml) to disable a rule or change the enforced style.
 
-```yml
-# cucumber_lint.yml
-table_headers: lowercase
-```
+### Rules
 
-### Features
-
-#### Empty `.feature` files
-* Not allowed
+##### consistent_table_headers
+* requires all table headers to have the same style
+  * supported styles: uppercase and lowercase
+  * scenario outline placeholders must share the same style
 
 
-#### Repeating step keywords
+##### consistent_table_whitespace
+* requires leading and trailing space around the cell content and the pipes to be aligned
+
+
+  ```coffee
+  # Bad                    # Bad                           # Good
+  |VEGETABLE|CODENAME|     | VEGETABLE | CODENAME   |      | VEGETABLE | CODENAME |
+  |Asparagus|Alpha|        |Asparagus | Alpha   |          | Asparagus | Alpha    |
+  |Broccoli|Bravo|         |Broccoli      | Bravo    |     | Broccoli  | Bravo    |
+  |Carrot|Charlie|         |  Carrot| Charlie      |       | Carrot    | Charlie  |
+  ```
+
+##### no_empty_features
+* empty `.feature` files are not allowed
+
+
+##### no_repeating_keywords
 * Use `And` instead of repeating `Given`, `When`, or `Then`
 
-```coffee
-# Bad         # Good
-Given A       Given A
-Given B       And B
-When C        When C
-Then D        Then D
-Then E        And E
-```
 
-#### Table whitespace
-* requires leading and trailing space around the cell content
-* requires pipes to be aligned
-
-
-```coffee
-# Bad                      # Bad                               # Good
-|VEGETABLE|CODENAME|       | VEGETABLE | CODENAME      |       | VEGETABLE | CODENAME |
-|Asparagus|Alpha|          |Asparagus | Alpha   |              | Asparagus | Alpha    |
-|Broccoli|Bravo|           |Broccoli      | Bravo    |         | Broccoli  | Bravo    |
-|Carrot|Charlie|           |  Carrot| Charlie      |           | Carrot    | Charlie  |
-```
-
-#### Table headers and scenario outline placeholders
-* required to be uppercase by default (configure to require lowercase)
+  ```coffee
+  # Bad         # Good
+  Given A       Given A
+  Given B       And B
+  When C        When C
+  When D        And D
+  Then E        Then E
+  Then F        And F
+  ```

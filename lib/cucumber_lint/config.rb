@@ -20,23 +20,25 @@ module CucumberLint
 
     private
 
-
+    # rubocop:disable Metrics/MethodLength
     def parse_config
       defaults = load_default_config
       overrides = load_config "#{@dir}/cucumber_lint.yml"
 
-      defaults.each_pair do |style, style_options|
-        next unless overrides.key?(style)
+      overrides.each_pair do |style, style_overrides|
+        style_overrides.each_pair do |key, value|
+          if key == 'enforced_style'
+            supported = defaults[style]['supported_styles']
+            fail UnsupportedStyle.new style, supported, value unless supported.include?(value)
+          end
 
-        if style_options['supported_styles'].include? overrides[style]
-          style_options['enforced_style'] = overrides[style]
-        else
-          fail UnsupportedStyle.new style, style_options['supported_styles'], overrides[style]
+          defaults[style][key] = value
         end
       end
 
       defaults.to_open_struct
     end
+    # rubocop:enable Metrics/MethodLength
 
 
     def load_config path
