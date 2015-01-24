@@ -16,7 +16,7 @@ module CucumberLint
 
       opts = extract_args args
       @config = load_config fix: opts[:fix]
-      @results = OpenStruct.new(total: 0, passed: 0, failed: 0, written: 0, errors: [])
+      @results = OpenStruct.new(total: 0, passed: 0, failed: 0, written: 0, deleted: 0, errors: [])
     end
 
 
@@ -29,22 +29,25 @@ module CucumberLint
       exit 1 unless @results.errors.empty?
     end
 
+
     private
 
+
+    def add_result status, errors
+      @results.total += 1
+      @results[status] += 1
+      @results.errors += errors
+      @out.print output_for_status(status)
+    end
+
+
     def lint_feature filename
-      linter = FeatureLinter.new filename, config: @config
+      linted_file = LintedFile.new filename
+
+      linter = FeatureLinter.new config: @config, linted_file: linted_file
       linter.lint
 
-      if linter.errors?
-        @results.errors += linter.errors
-        file_failed
-      elsif linter.can_fix?
-        file_written
-      else
-        file_passed
-      end
-
-      linter.write if linter.can_fix?
+      add_result linted_file.resolve, linted_file.errors
     end
 
 
@@ -70,12 +73,15 @@ module CucumberLint
     end
 
 
+    # rubocop:disable Metrics/AbcSize
     def file_counts
-      out = ["#{@results.passed} passed".green]
-      out << "#{@results.written} written".yellow if @results.written > 0
-      out << "#{@results.failed} failed".red if @results.failed > 0
-      "(#{out.join(', ')})"
+      [:passed, :written, :deleted, :failed].map do |status|
+        if status == :passed || @results[status] > 0
+          "#{@results[status]} #{status}".colorize(output_color_for status)
+        end
+      end.compact.join(', ')
     end
+    # rubocop:enable Metrics/AbcSize
 
 
     def output_errors
@@ -87,7 +93,7 @@ module CucumberLint
     def output_counts
       @out.print "\n\n"
       @out.print "#{@results.total} file#{'s' if @results.total != 1} inspected"
-      @out.print " #{file_counts}" if @results.total > 0
+      @out.print " (#{file_counts})" if @results.total > 0
       @out.print "\n"
     end
 
@@ -97,25 +103,25 @@ module CucumberLint
       output_counts
     end
 
-
-    def file_passed
-      @results.total += 1
-      @results.passed += 1
-      @out.print '.'.green
+    def output_color_for status
+      case status
+      when :passed then :green
+      when :failed then :red
+      else :yellow
+      end
     end
 
-
-    def file_failed
-      @results.total += 1
-      @results.failed += 1
-      @out.print 'F'.red
+    def output_letter_for status
+      case status
+      when :passed then '.'
+      when :failed then 'F'
+      when :written then 'W'
+      when :deleted then 'D'
+      end
     end
 
-
-    def file_written
-      @results.total += 1
-      @results.written += 1
-      @out.print 'W'.yellow
+    def output_for_status status
+      output_letter_for(status).colorize output_color_for(status)
     end
 
   end

@@ -2,19 +2,19 @@ module CucumberLint
   # A base linter, not meant to be instantiated
   class Linter
 
-    attr_reader :errors, :fix_list
-
-
-    def initialize config:, parent: nil
+    def initialize config:, linted_file:
       @config = config
+      @linted_file = linted_file
+    end
 
-      if parent
-        @errors = parent.errors
-        @fix_list = parent.fix_list
-      else
-        @errors = []
-        @fix_list = FixList.new
-      end
+
+    def add_error *args
+      @linted_file.add_error(*args)
+    end
+
+
+    def add_fix *args
+      @linted_file.add_fix(*args)
     end
 
   end

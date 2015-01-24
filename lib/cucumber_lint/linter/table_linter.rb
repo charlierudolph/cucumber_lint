@@ -5,11 +5,10 @@ module CucumberLint
   # A linter for a series of table rows (as parsed by Gherkin)
   class TableLinter < Linter
 
-    def initialize rows:, file_lines:, config:, parent:
-      super config: config, parent: parent
+    def initialize rows:, config:, linted_file:
+      super config: config, linted_file: linted_file
 
       @rows = rows
-      @file_lines = file_lines
       @header_style = @config.table_headers.enforced_style.to_sym
     end
 
@@ -25,9 +24,9 @@ module CucumberLint
 
     def report_bad_table_headers
       if @config.fix
-        fix_list.add @rows[0].line, -> (line) { line.split('|', -1).map(&@header_style).join('|') }
+        add_fix @rows[0].line, -> (line) { line.split('|', -1).map(&@header_style).join('|') }
       else
-        errors << "#{@rows[0].line}: #{@header_style} table headers"
+        add_error "#{@rows[0].line}: #{@header_style} table headers"
       end
     end
 
@@ -46,16 +45,16 @@ module CucumberLint
     def bad_whitespace
       if @config.fix
         @rows.each_with_index.map do |row, index|
-          fix_list.add row.line, -> (line) { line.gsub(/\|.+?\n/, expected_table_lines[index]) }
+          add_fix row.line, -> (line) { line.gsub(/\|.+?\n/, expected_table_lines[index]) }
         end
       else
-        errors << "#{@rows[0].line}: Fix table whitespace"
+        add_error "#{@rows[0].line}: Fix table whitespace"
       end
     end
 
 
     def determine_actual_table_lines
-      @rows.map { |row| @file_lines[row.line - 1].lstrip }
+      @rows.map { |row| @linted_file.lines[row.line - 1].lstrip }
     end
 
 

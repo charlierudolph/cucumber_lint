@@ -11,11 +11,11 @@ Feature: linting
       """
       F
 
-      ./features/table_headers.feature:5: uppercase table headers
-      ./features/table_headers.feature:13: uppercase "<vegetable>"
-      ./features/table_headers.feature:13: uppercase "<fruit>"
-      ./features/table_headers.feature:14: uppercase "<code name>"
-      ./features/table_headers.feature:17: uppercase table headers
+      ./features/test.feature:5: uppercase table headers
+      ./features/test.feature:13: uppercase "<vegetable>"
+      ./features/test.feature:13: uppercase "<fruit>"
+      ./features/test.feature:14: uppercase "<code name>"
+      ./features/test.feature:17: uppercase table headers
 
       1 file inspected (0 passed, 1 failed)
       """

@@ -4,11 +4,10 @@ module CucumberLint
   # A linter for a series of steps in a scenario outline (as parsed by Gherkin)
   class ScenarioOutlineLinter < Linter
 
-    def initialize steps:, file_lines:, config:, parent:
-      super config: config, parent: parent
+    def initialize steps:, config:, linted_file:
+      super config: config, linted_file: linted_file
 
       @steps = steps
-      @file_lines = file_lines
       @header_style = @config.table_headers.enforced_style.to_sym
     end
 
@@ -32,9 +31,9 @@ module CucumberLint
 
     def report_bad_placeholder line_number, str
       if @config.fix
-        fix_list.add line_number, -> (line) { line.sub(str, str.public_send(@header_style)) }
+        add_fix line_number, -> (line) { line.sub(str, str.public_send(@header_style)) }
       else
-        errors << "#{line_number}: #{@header_style} \"#{str}\""
+        add_error "#{line_number}: #{@header_style} \"#{str}\""
       end
     end
 

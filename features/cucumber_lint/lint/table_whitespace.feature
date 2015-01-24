@@ -7,8 +7,8 @@ Feature: linting
       """
       F
 
-      ./features/table_whitespace.feature:5: Fix table whitespace
-      ./features/table_whitespace.feature:17: Fix table whitespace
+      ./features/test.feature:5: Fix table whitespace
+      ./features/test.feature:17: Fix table whitespace
 
       1 file inspected (0 passed, 1 failed)
       """

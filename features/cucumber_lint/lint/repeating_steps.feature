@@ -7,12 +7,12 @@ Feature: linting
       """
       F
 
-      ./features/repeating_steps.feature:5: Use "And" instead of repeating "Given"
-      ./features/repeating_steps.feature:6: Use "And" instead of repeating "Given"
-      ./features/repeating_steps.feature:8: Use "And" instead of repeating "When"
-      ./features/repeating_steps.feature:9: Use "And" instead of repeating "When"
-      ./features/repeating_steps.feature:11: Use "And" instead of repeating "Then"
-      ./features/repeating_steps.feature:12: Use "And" instead of repeating "Then"
+      ./features/test.feature:5: Use "And" instead of repeating "Given"
+      ./features/test.feature:6: Use "And" instead of repeating "Given"
+      ./features/test.feature:8: Use "And" instead of repeating "When"
+      ./features/test.feature:9: Use "And" instead of repeating "When"
+      ./features/test.feature:11: Use "And" instead of repeating "Then"
+      ./features/test.feature:12: Use "And" instead of repeating "Then"
 
       1 file inspected (0 passed, 1 failed)
       """

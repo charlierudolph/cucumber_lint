@@ -31,6 +31,10 @@ table_headers: lowercase
 
 ### Features
 
+#### Empty `.feature` files
+* Not allowed
+
+
 #### Repeating step keywords
 * Use `And` instead of repeating `Given`, `When`, or `Then`
 

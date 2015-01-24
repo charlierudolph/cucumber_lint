@@ -1,3 +1,5 @@
+require 'core_ext/array'
+require 'core_ext/basic_object'
 require 'core_ext/hash'
 require 'gherkin/formatter/json_formatter'
 require 'gherkin/parser/parser'
@@ -7,30 +9,34 @@ module CucumberLint
   # A linter for a given feature (represented by a filename)
   class FeatureLinter < Linter
 
-    attr_reader :errors, :fix_list
-
-    def initialize path, config:
-      super(config: config)
-
-      @path = path
-      @content = IO.read(path)
-      @file_lines = @content.lines
-    end
-
-
-    def can_fix?
-      !fix_list.empty?
-    end
-
-
-    def errors?
-      !errors.empty?
-    end
-
-
     def lint
-      feature = parse_content
+      features = parse_content
 
+      features.each do |feature|
+        lint_feature feature
+      end
+
+      empty_feature if features.count == 0
+    end
+
+    private
+
+
+    def empty_feature
+      if @config.fix
+        @linted_file.mark_for_deletion
+      else
+        add_error ' Remove empty feature'
+      end
+    end
+
+
+    def lint_examples examples
+      examples.each { |example| lint_table example.rows }
+    end
+
+
+    def lint_feature feature
       feature.elements.each do |element|
         lint_steps element.steps
 
@@ -39,25 +45,6 @@ module CucumberLint
           lint_examples element.examples
         end
       end
-
-      errors.map! { |error| "#{feature.uri}:#{error}" }
-    end
-
-    def write
-      fixed_content = fix_list.apply(@file_lines).join
-      IO.write(@path, fixed_content)
-    end
-
-    private
-
-
-    def linter_options
-      { config: @config, file_lines: @file_lines, parent: self }
-    end
-
-
-    def lint_examples examples
-      examples.each { |example| lint_table example.rows }
     end
 
 
@@ -79,13 +66,18 @@ module CucumberLint
     end
 
 
+    def linter_options
+      { config: @config, linted_file: @linted_file }
+    end
+
+
     def parse_content
       io = StringIO.new
       formatter = Gherkin::Formatter::JSONFormatter.new(io)
       parser = Gherkin::Parser::Parser.new(formatter)
-      parser.parse(@content, @path, 0)
+      parser.parse(@linted_file.content, '', 0)
       formatter.done
-      MultiJson.load(io.string)[0].to_open_struct
+      MultiJson.load(io.string).to_open_struct
     end
 
   end
