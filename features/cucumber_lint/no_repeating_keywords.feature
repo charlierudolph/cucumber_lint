@@ -14,12 +14,12 @@ Feature: no_repeating_keywords enabled
           Then F
       """
 
-  Scenario: lint - disabled
+  Scenario: disabled
     Given I have "no_repeating_keywords" disabled
     When I run `cucumber_lint`
     Then it passes
 
-  Scenario: lint - enabled
+  Scenario: lint and fix
     Given I have "no_repeating_keywords" enabled
     When I run `cucumber_lint`
     Then it fails with
@@ -27,9 +27,6 @@ Feature: no_repeating_keywords enabled
       | 5    | Use "And" instead of repeating "Given" |
       | 7    | Use "And" instead of repeating "When"  |
       | 9    | Use "And" instead of repeating "Then"  |
-
-  Scenario: fix - enabled
-    Given I have "no_repeating_keywords" enabled
     When I run `cucumber_lint --fix`
     Then my feature now has content
       """

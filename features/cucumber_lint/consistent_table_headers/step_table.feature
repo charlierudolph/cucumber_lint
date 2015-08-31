@@ -14,20 +14,17 @@ Feature: consistent_table_headers for a step table
           Then my tests pass
       """
 
-  Scenario: lint - disabled
+  Scenario: disabled
     Given I have "consistent_table_headers" disabled
     When I run `cucumber_lint`
     Then it passes
 
-  Scenario: lint - enabled uppercase
+  Scenario: uppercase - lint and fix
     Given I have "consistent_table_headers" enabled with "enforced_style" as "uppercase"
     When I run `cucumber_lint`
     Then it fails with
       | LINE | MESSAGE                 |
       | 5    | uppercase table headers |
-
-  Scenario: fix - enabled uppercase
-    Given I have "consistent_table_headers" enabled with "enforced_style" as "uppercase"
     When I run `cucumber_lint --fix`
     Then my feature now has content
       """
@@ -44,15 +41,12 @@ Feature: consistent_table_headers for a step table
     When I run `cucumber_lint`
     Then it passes
 
-  Scenario: lint - enabled uppercase
+  Scenario: lowercase - lint and fix
     Given I have "consistent_table_headers" enabled with "enforced_style" as "lowercase"
     When I run `cucumber_lint`
     Then it fails with
       | LINE | MESSAGE                 |
       | 5    | lowercase table headers |
-
-  Scenario: fix - enabled uppercase
-    Given I have "consistent_table_headers" enabled with "enforced_style" as "lowercase"
     When I run `cucumber_lint --fix`
     Then my feature now has content
       """

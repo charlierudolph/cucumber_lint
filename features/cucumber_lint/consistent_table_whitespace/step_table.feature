@@ -14,20 +14,17 @@ Feature: consistent_table_whitespace for a step table
           Then my tests pass
       """
 
-  Scenario: lint - disabled
+  Scenario: disabled
     Given I have "consistent_table_whitespace" disabled
     When I run `cucumber_lint`
     Then it passes
 
-  Scenario: lint - enabled
+  Scenario: lint and fix
     Given I have "consistent_table_whitespace" enabled
     When I run `cucumber_lint`
     Then it fails with
       | LINE | MESSAGE              |
       | 5    | Fix table whitespace |
-
-  Scenario: fix - enabled
-    Given I have "consistent_table_whitespace" enabled
     When I run `cucumber_lint --fix`
     Then my feature now has content
       """

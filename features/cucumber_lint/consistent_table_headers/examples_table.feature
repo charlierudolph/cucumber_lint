@@ -16,12 +16,12 @@ Feature: consistent_table_headers for an examples table
             | Carrot    | Cherry | Charlie   |
       """
 
-  Scenario: lint - disabled
+  Scenario: disabled
     Given I have "consistent_table_headers" disabled
     When I run `cucumber_lint`
     Then it passes
 
-  Scenario: lint - enabled
+  Scenario: uppercase - lint and fix
     Given I have "consistent_table_headers" enabled with "enforced_style" as "uppercase"
     When I run `cucumber_lint`
     Then it fails with
@@ -29,9 +29,6 @@ Feature: consistent_table_headers for an examples table
       | 4    | uppercase "<fruit>"     |
       | 5    | uppercase "<Code Name>" |
       | 8    | uppercase table headers |
-
-  Scenario: fix - enabled
-    Given I have "consistent_table_headers" enabled with "enforced_style" as "uppercase"
     When I run `cucumber_lint --fix`
     Then my feature now has content
       """
@@ -50,7 +47,7 @@ Feature: consistent_table_headers for an examples table
     When I run `cucumber_lint`
     Then it passes
 
-  Scenario: lint - enabled lowercase
+  Scenario: lowercase - lint and fix
     Given I have "consistent_table_headers" enabled with "enforced_style" as "lowercase"
     When I run `cucumber_lint`
     Then it fails with
@@ -58,9 +55,6 @@ Feature: consistent_table_headers for an examples table
       | 4    | lowercase "<VEGETABLE>" |
       | 5    | lowercase "<Code Name>" |
       | 8    | lowercase table headers |
-
-  Scenario: fix - enabled lowercase
-    Given I have "consistent_table_headers" enabled with "enforced_style" as "lowercase"
     When I run `cucumber_lint --fix`
     Then my feature now has content
       """
