@@ -26,6 +26,10 @@ Override the [default config](./config/default.yml) to disable a rule or change 
 
 ### Rules
 
+##### consistent_empty_lines
+* requires empty lines to be used consistently throughout features
+
+
 ##### consistent_table_headers
 * requires all table headers to have the same style
   * supported styles: uppercase and lowercase

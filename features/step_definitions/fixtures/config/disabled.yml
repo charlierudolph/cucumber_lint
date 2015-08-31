@@ -1,3 +1,7 @@
+consistent_empty_lines:
+  enabled: false
+
+
 consistent_table_headers:
   enabled: false
 

@@ -13,7 +13,8 @@ module CucumberLint
       features = parse_content
 
       features.each do |feature|
-        lint_feature feature
+        lint_feature_empty_lines feature if @config.consistent_empty_lines.enabled
+        lint_elements feature
       end
 
       empty_feature if features.count == 0
@@ -38,7 +39,9 @@ module CucumberLint
     end
 
 
-    def lint_feature feature
+    def lint_elements feature
+      return unless feature.elements
+
       feature.elements.each do |element|
         lint_steps element.steps
 
@@ -47,6 +50,12 @@ module CucumberLint
           lint_examples element.examples
         end
       end
+    end
+
+
+    def lint_feature_empty_lines feature
+      linter = FeatureEmptyLinesLinter.new linter_options.merge(feature: feature)
+      linter.lint
     end
 
 

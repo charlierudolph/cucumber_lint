@@ -34,7 +34,7 @@ end
 
 
 Then(/^it passes$/) do
-  expect(@last_run.exit_status).to eql 0
+  expect(@last_run.exit_status).to eql(0), @last_run.out.uncolorize
 end
 
 
