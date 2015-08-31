@@ -12,11 +12,11 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/charlierudolph/cucumber_lint'
   spec.license       = 'MIT'
 
-  spec.add_runtime_dependency 'colorize', '~> 0.7.5'
-  spec.add_runtime_dependency 'gherkin', '~> 2.12.2', '>= 2.12.2'
-  spec.add_runtime_dependency 'multi_json', '~> 1.10.1', '>= 1.10.1'
+  spec.add_runtime_dependency 'colorize', '~> 0.7.7'
+  spec.add_runtime_dependency 'gherkin', '~> 2.12.2'
+  spec.add_runtime_dependency 'multi_json', '~> 1.11.2'
 
   spec.files         = `git ls-files`.split("\n")
-  spec.executables   = spec.files.grep(/^bin\//) { |f| File.basename(f) }
+  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 end

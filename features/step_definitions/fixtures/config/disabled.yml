@@ -1,9 +1,5 @@
 consistent_table_headers:
   enabled: false
-  enforced_style: uppercase
-  supported_styles:
-    - lowercase  # column header
-    - uppercase  # COLUMN HEADER
 
 
 consistent_table_whitespace:

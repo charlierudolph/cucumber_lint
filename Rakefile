@@ -20,7 +20,7 @@ end
 
 desc 'Run features'
 task :features do
-  sh 'bundle exec cucumber'
+  sh 'bundle exec cucumber -f progress'
 end
 
 

@@ -1,21 +1,16 @@
+require 'active_support/core_ext/hash/deep_merge.rb'
 require 'cucumber_lint'
 require 'open4'
 require 'rspec'
 
 
 BIN_PATH = "#{File.dirname(__FILE__)}/../../bin"
-FIXTURES_PATH = "#{File.dirname(__FILE__)}/fixtures"
-TMP_DIR = '/tmp'
+CONFIG_PATH = "#{File.dirname(__FILE__)}/fixtures/config/disabled.yml"
 
 
 Before do
-  Dir.chdir TMP_DIR
-  FileUtils.rm_rf 'features'
-  IO.write 'cucumber_lint.yml', IO.read("#{FIXTURES_PATH}/config/disabled.yml")
+  @tmp_dir = Dir.mktmpdir
+  Dir.chdir @tmp_dir
+  IO.write 'cucumber_lint.yml', IO.read(CONFIG_PATH)
   Dir.mkdir 'features'
-end
-
-
-at_exit do
-  FileUtils.rm_rf TMP_DIR
 end

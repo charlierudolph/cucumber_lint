@@ -7,26 +7,22 @@ end
 
 
 Given(/^I have "(.+?)" (enabled|disabled)$/) do |key, value|
-  config = YAML.load IO.read "#{TMP_DIR}/cucumber_lint.yml"
-  config[key]['enabled'] = value == 'enabled'
-  IO.write "#{TMP_DIR}/cucumber_lint.yml", config.to_yaml
+  update_config(key => { enabled: value == 'enabled' })
 end
 
 
-Given(/^I have "(.+?)" enabled with "(.+?)" as "(.+?)"$/) do |key, configKey, configValue|
-  config = YAML.load IO.read "#{TMP_DIR}/cucumber_lint.yml"
-  config[key]['enabled'] = true
-  config[key][configKey] = configValue
-  IO.write "#{TMP_DIR}/cucumber_lint.yml", config.to_yaml
+Given(/^I have "(.+?)" enabled with "(.+?)" as "(.+?)"$/) do |key, config_key, config_value|
+  config_value = config_value.to_i if config_value.match(/^\d*$/)
+  update_config(key => { enabled: true, config_key => config_value })
 end
 
 
 Given(/^I have a file without a feature$/) do
-  IO.write "#{TMP_DIR}/features/test.feature", ''
+  write_feature ''
 end
 
 Given(/^I have a feature with content$/) do |content|
-  IO.write "#{TMP_DIR}/features/test.feature", content
+  write_feature content.to_s
 end
 
 
@@ -64,12 +60,12 @@ end
 
 
 Then(/^my feature now has content$/) do |content|
-  actual = IO.read "#{TMP_DIR}/features/test.feature"
-  expect(actual).to eql content
+  actual = IO.read feature_path
+  expect(actual).to eql content.to_s
 end
 
 
 Then(/^the file has been deleted$/) do
-  exists = File.exist? "#{TMP_DIR}/features/test.feature"
+  exists = File.exist? feature_path
   expect(exists).to be_falsy
 end

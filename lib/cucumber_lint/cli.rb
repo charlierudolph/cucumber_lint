@@ -73,7 +73,6 @@ module CucumberLint
     end
 
 
-    # rubocop:disable Metrics/AbcSize
     def file_counts
       [:passed, :written, :deleted, :failed].map do |status|
         if status == :passed || @results[status] > 0
@@ -81,7 +80,6 @@ module CucumberLint
         end
       end.compact.join(', ')
     end
-    # rubocop:enable Metrics/AbcSize
 
 
     def output_errors
