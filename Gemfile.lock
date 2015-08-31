@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cucumber_lint (0.0.4)
+    cucumber_lint (0.1.0)
       colorize (~> 0.7.7)
       gherkin (~> 2.12.2)
       multi_json (~> 1.11.2)

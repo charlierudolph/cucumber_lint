@@ -1,12 +1,9 @@
-Feature: consistent_empty_lines between description and scenario
+Feature: consistent_empty_lines between feature and element
 
   Background:
     Given I have a feature with content
       """
       Feature: Test Feature
-        As a user
-        When I have this
-        I expect that
         Scenario: Test Scenario
           Given this
           Then that
@@ -18,18 +15,17 @@ Feature: consistent_empty_lines between description and scenario
     Then it passes
 
   Scenario: lint and fix
-    Given I have "consistent_empty_lines" enabled with "between_description_and_scenario" as "1"
+    Given I have "consistent_empty_lines" enabled with
+      | KEY                         | VALUE |
+      | between_feature_and_element | 1     |
     When I run `cucumber_lint`
     Then it fails with
       | LINE | MESSAGE        |
-      | 5    | Add empty line |
+      | 2    | Add empty line |
     When I run `cucumber_lint --fix`
     Then my feature now has content
       """
       Feature: Test Feature
-        As a user
-        When I have this
-        I expect that
 
         Scenario: Test Scenario
           Given this

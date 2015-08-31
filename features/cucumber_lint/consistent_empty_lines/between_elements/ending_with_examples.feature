@@ -23,7 +23,9 @@ Feature: consistent_empty_lines between elements (ending with examples)
     Then it passes
 
   Scenario: lint and fix
-    Given I have "consistent_empty_lines" enabled with "between_elements" as "1"
+    Given I have "consistent_empty_lines" enabled with
+      | KEY              | VALUE |
+      | between_elements | 1     |
     When I run `cucumber_lint`
     Then it fails with
       | LINE | MESSAGE        |

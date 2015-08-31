@@ -1,7 +1,9 @@
 Feature: consistent_table_headers enforcing an unsupported style
 
   Background:
-    Given I have "consistent_table_headers" enabled with "enforced_style" as "invalid"
+    Given I have "consistent_table_headers" enabled with
+      | KEY            | VALUE   |
+      | enforced_style | invalid |
 
   Scenario: lint
     When I run `cucumber_lint`

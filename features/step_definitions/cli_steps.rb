@@ -6,14 +6,20 @@ Given(/^I have no files$/) do
 end
 
 
-Given(/^I have "(.+?)" (enabled|disabled)$/) do |key, value|
-  update_config(key => { enabled: value == 'enabled' })
+Given(/^I have "(.+?)" (enabled|disabled)$/) do |rule, status|
+  update_config(rule => { enabled: status == 'enabled' })
 end
 
 
-Given(/^I have "(.+?)" enabled with "(.+?)" as "(.+?)"$/) do |key, config_key, config_value|
-  config_value = config_value.to_i if config_value.match(/^\d*$/)
-  update_config(key => { enabled: true, config_key => config_value })
+Given(/^I have "(.+?)" enabled with$/) do |rule, settingsTable|
+  settings = {}
+  settingsTable.hashes.each do |row|
+    key = row['KEY']
+    value = row['VALUE']
+    value = value.to_i if value.match(/^\d*$/)
+    settings[key] = value
+  end
+  update_config(rule => settings.merge(enabled: true))
 end
 
 

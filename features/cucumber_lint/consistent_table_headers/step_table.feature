@@ -20,7 +20,9 @@ Feature: consistent_table_headers for a step table
     Then it passes
 
   Scenario: uppercase - lint and fix
-    Given I have "consistent_table_headers" enabled with "enforced_style" as "uppercase"
+    Given I have "consistent_table_headers" enabled with
+      | KEY            | VALUE     |
+      | enforced_style | uppercase |
     When I run `cucumber_lint`
     Then it fails with
       | LINE | MESSAGE                 |
@@ -42,7 +44,9 @@ Feature: consistent_table_headers for a step table
     Then it passes
 
   Scenario: lowercase - lint and fix
-    Given I have "consistent_table_headers" enabled with "enforced_style" as "lowercase"
+    Given I have "consistent_table_headers" enabled with
+      | KEY            | VALUE     |
+      | enforced_style | lowercase |
     When I run `cucumber_lint`
     Then it fails with
       | LINE | MESSAGE                 |

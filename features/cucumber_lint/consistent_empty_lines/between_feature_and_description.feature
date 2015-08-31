@@ -16,7 +16,9 @@ Feature: consistent_empty_lines between feature and description
     Then it passes
 
   Scenario: lint and fix
-    Given I have "consistent_empty_lines" enabled with "feature_and_description" as "1"
+    Given I have "consistent_empty_lines" enabled with
+      | KEY                     | VALUE |
+      | feature_and_description | 1     |
     When I run `cucumber_lint`
     Then it fails with
       | LINE | MESSAGE           |
