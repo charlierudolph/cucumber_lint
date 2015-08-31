@@ -1,4 +1,4 @@
-Feature: consistent_table_whitespace enabled for a step table
+Feature: consistent_table_whitespace for a step table
 
   Background:
     Given I have a feature with content
@@ -13,32 +13,23 @@ Feature: consistent_table_whitespace enabled for a step table
             |Carrot|Charlie|
           Then my tests pass
       """
-    And I have consistent_table_whitespace enabled
 
-
-  Scenario: lint
+  Scenario: lint - disabled
+    Given I have "consistent_table_whitespace" disabled
     When I run `cucumber_lint`
-    Then I see the output
-      """
-      F
+    Then it passes
 
-      ./features/test.feature:5: Fix table whitespace
+  Scenario: lint - enabled
+    Given I have "consistent_table_whitespace" enabled
+    When I run `cucumber_lint`
+    Then it fails with
+      | LINE | MESSAGE              |
+      | 5    | Fix table whitespace |
 
-      1 file inspected (0 passed, 1 failed)
-      """
-    And it exits with status 1
-
-
-  Scenario: fix
+  Scenario: fix - enabled
+    Given I have "consistent_table_whitespace" enabled
     When I run `cucumber_lint --fix`
-    Then I see the output
-      """
-      W
-
-      1 file inspected (0 passed, 1 written)
-      """
-    And it exits with status 0
-    And my feature now has content
+    Then my feature now has content
       """
       Feature: Test Feature
 
@@ -50,3 +41,5 @@ Feature: consistent_table_whitespace enabled for a step table
             | Carrot    | Charlie  |
           Then my tests pass
       """
+    When I run `cucumber_lint`
+    Then it passes

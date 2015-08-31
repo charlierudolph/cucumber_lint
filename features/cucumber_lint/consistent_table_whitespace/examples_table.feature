@@ -1,4 +1,4 @@
-Feature: consistent_table_whitespace enabled for an examples table
+Feature: consistent_table_whitespace for an examples table
 
   Background:
     Given I have a feature with content
@@ -15,32 +15,23 @@ Feature: consistent_table_whitespace enabled for an examples table
             |Broccoli  | Banana |  Bravo    |
             | Carrot|   Cherry |   Charlie  |
       """
-    And I have consistent_table_whitespace enabled
 
-
-  Scenario: lint
-    When I run `cucumber_lint`
-    Then I see the output
-      """
-      F
-
-      ./features/test.feature:8: Fix table whitespace
-
-      1 file inspected (0 passed, 1 failed)
-      """
-    And it exits with status 1
-
-
-  Scenario: fix
+  Scenario: lint - disabled
+    Given I have "consistent_table_whitespace" enabled
     When I run `cucumber_lint --fix`
-    Then I see the output
-      """
-      W
+    Then it passes
 
-      1 file inspected (0 passed, 1 written)
-      """
-    And it exits with status 0
-    And my feature now has content
+  Scenario: lint - enabled
+    Given I have "consistent_table_whitespace" enabled
+    When I run `cucumber_lint`
+    Then it fails with
+      | LINE | MESSAGE              |
+      | 8    | Fix table whitespace |
+
+  Scenario: fix - enabled
+    Given I have "consistent_table_whitespace" enabled
+    When I run `cucumber_lint --fix`
+    Then my feature now has content
       """
       Feature: Test Feature
 
@@ -54,3 +45,5 @@ Feature: consistent_table_whitespace enabled for an examples table
             | Broccoli  | Banana | Bravo    |
             | Carrot    | Cherry | Charlie  |
       """
+    When I run `cucumber_lint`
+    Then it passes
