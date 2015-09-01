@@ -1,5 +1,6 @@
 require 'core_ext/string'
 require 'gherkin/formatter/pretty_formatter'
+require 'stringio'
 
 module CucumberLint
   # A linter for a series of table rows (as parsed by Gherkin)

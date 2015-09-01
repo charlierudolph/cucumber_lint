@@ -4,6 +4,7 @@ require 'core_ext/hash'
 require 'gherkin/formatter/json_formatter'
 require 'gherkin/parser/parser'
 require 'multi_json'
+require 'stringio'
 
 module CucumberLint
   # A linter for a given feature (represented by a filename)

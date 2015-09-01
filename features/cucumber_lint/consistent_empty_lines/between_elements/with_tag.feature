@@ -1,13 +1,17 @@
-Feature: consistent_empty_lines between feature and description
+Feature: consistent_empty_lines between elements (with tag)
 
   Background:
     Given I have a feature with content
       """
       Feature: Test Feature
 
-        As a user
-        When I have this
-        I expect that
+        Scenario: Test Scenario
+          Given this
+          Then that
+        @tag
+        Scenario: Test Scenario
+          Given this
+          Then that
       """
 
   Scenario: disabled
@@ -17,19 +21,25 @@ Feature: consistent_empty_lines between feature and description
 
   Scenario: lint and fix
     Given I have "consistent_empty_lines" enabled with
-      | KEY                     | VALUE |
-      | feature_and_description | 1     |
+      | KEY              | VALUE |
+      | between_elements | 1     |
     When I run `cucumber_lint`
     Then it fails with
-      | LINE | MESSAGE           |
-      | 2    | Remove empty line |
+      | LINE | MESSAGE        |
+      | 6    | Add empty line |
     When I run `cucumber_lint --fix`
     Then my feature now has content
       """
       Feature: Test Feature
-        As a user
-        When I have this
-        I expect that
+
+        Scenario: Test Scenario
+          Given this
+          Then that
+
+        @tag
+        Scenario: Test Scenario
+          Given this
+          Then that
       """
     When I run `cucumber_lint`
     Then it passes

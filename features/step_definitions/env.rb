@@ -2,6 +2,7 @@ require 'active_support/core_ext/hash/deep_merge.rb'
 require 'cucumber_lint'
 require 'open4'
 require 'rspec'
+require 'tmpdir'
 
 
 BIN_PATH = "#{File.dirname(__FILE__)}/../../bin"

@@ -1,3 +1,5 @@
+require 'pathname'
+
 module CucumberLint
   # A class that represents a file being linted
   class LintedFile

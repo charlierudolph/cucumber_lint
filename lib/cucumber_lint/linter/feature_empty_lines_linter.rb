@@ -33,6 +33,15 @@ module CucumberLint
     end
 
 
+    def element_start element
+      if element.tags
+        element.tags[0].line
+      else
+        element.line
+      end
+    end
+
+
     def expected_first_element_start
       spacing = if @description == ''
                   config_value(:between_feature_and_element)
@@ -72,7 +81,7 @@ module CucumberLint
 
       expected_element_start = expected_first_element_start
       @feature.elements.each do |element|
-        resolve_empty_line_difference element.line, expected_element_start
+        resolve_empty_line_difference element_start(element), expected_element_start
         lint_scenario_outline_and_examples element if element.type == 'scenario_outline'
         expected_element_start = element_end(element) + config_value(:between_elements) + 1
       end

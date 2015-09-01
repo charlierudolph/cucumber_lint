@@ -1,4 +1,5 @@
 require 'colorize'
+require 'pathname'
 require 'ostruct'
 
 module CucumberLint
