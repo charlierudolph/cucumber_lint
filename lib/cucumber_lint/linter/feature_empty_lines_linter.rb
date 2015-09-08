@@ -56,13 +56,16 @@ module CucumberLint
 
 
     def extra_empty_line line_number, count
-      if @config.fix
-        count.times do |i|
-          add_fix line_number + i, -> (line) { line.sub("\n", '') }
-        end
-      else
-        add_error "#{line_number}: Remove#{" #{count}" if count > 1} empty line#{'s' if count > 1}"
+      fixes = count.times do |i|
+        { fix: -> (line) { line.sub("\n", '') },
+          line_number: line_number + i }
       end
+
+      add_error(
+        fixes: fixes,
+        line_number: line_number,
+        message: "Remove#{" #{count}" if count > 1} empty line#{'s' if count > 1}"
+      )
     end
 
 
@@ -98,11 +101,11 @@ module CucumberLint
 
 
     def missing_empty_line line_number, count
-      if @config.fix
-        add_fix line_number, -> (line) { "\n" * count + line }
-      else
-        add_error "#{line_number}: Add#{" #{count}" if count > 1} empty line#{'s' if count > 1}"
-      end
+      add_error(
+        fix: -> (line) { "\n" * count + line },
+        line_number: line_number,
+        message: "Add#{" #{count}" if count > 1} empty line#{'s' if count > 1}"
+      )
     end
 
 

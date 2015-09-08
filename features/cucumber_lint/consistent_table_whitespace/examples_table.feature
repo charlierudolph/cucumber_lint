@@ -17,8 +17,8 @@ Feature: consistent_table_whitespace for an examples table
       """
 
   Scenario: disabled
-    Given I have "consistent_table_whitespace" enabled
-    When I run `cucumber_lint --fix`
+    Given I have "consistent_table_whitespace" disabled
+    When I run `cucumber_lint`
     Then it passes
 
   Scenario: lint and fix

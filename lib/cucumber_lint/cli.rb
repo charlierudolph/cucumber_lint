@@ -48,7 +48,13 @@ module CucumberLint
       linter = FeatureLinter.new config: @config, linted_file: linted_file
       linter.lint
 
-      add_result linted_file.resolve, linted_file.errors
+      result = if @config.fix
+                 linted_file.resolve_fix
+               else
+                 linted_file.resolve_lint
+               end
+
+      add_result result, linted_file.error_messages(@config.fix)
     end
 
 

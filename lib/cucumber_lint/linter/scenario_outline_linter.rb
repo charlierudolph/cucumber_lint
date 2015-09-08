@@ -32,11 +32,11 @@ module CucumberLint
     def inconsistent_placeholder line_number, str
       return unless @config.consistent_table_headers.enabled
 
-      if @config.fix
-        add_fix line_number, -> (line) { line.sub(str, str.public_send(@header_style)) }
-      else
-        add_error "#{line_number}: #{@header_style} \"#{str}\""
-      end
+      add_error(
+        fix: -> (line) { line.sub(str, str.public_send(@header_style)) },
+        line_number: line_number,
+        message: "#{@header_style} \"#{str}\""
+      )
     end
 
   end

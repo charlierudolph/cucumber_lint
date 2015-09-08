@@ -27,11 +27,10 @@ module CucumberLint
     def empty_feature
       return unless @config.no_empty_features.enabled
 
-      if @config.fix
-        @linted_file.mark_for_deletion
-      else
-        add_error ' Remove file with no feature'
-      end
+      add_error(
+        fix: :delete,
+        message: 'Remove file with no feature'
+      )
     end
 
 

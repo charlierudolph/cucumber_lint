@@ -33,11 +33,11 @@ module CucumberLint
     def repeated_keyword line_number, keyword
       return unless @config.no_repeating_keywords.enabled
 
-      if @config.fix
-        add_fix line_number, -> (line) { line.sub(keyword, 'And') }
-      else
-        add_error "#{line_number}: Use \"And\" instead of repeating \"#{keyword}\""
-      end
+      add_error(
+        fix: -> (line) { line.sub(keyword, 'And') },
+        line_number: line_number,
+        message: "Use \"And\" instead of repeating \"#{keyword}\""
+      )
     end
 
 

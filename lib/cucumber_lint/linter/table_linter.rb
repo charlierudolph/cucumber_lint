@@ -26,11 +26,11 @@ module CucumberLint
     def inconsistent_table_headers
       return unless @config.consistent_table_headers.enabled
 
-      if @config.fix
-        add_fix @rows[0].line, -> (line) { line.split('|', -1).map(&@header_style).join('|') }
-      else
-        add_error "#{@rows[0].line}: #{@header_style} table headers"
-      end
+      add_error(
+        fix: -> (line) { line.split('|', -1).map(&@header_style).join('|') },
+        line_number: @rows[0].line,
+        message: "#{@header_style} table headers"
+      )
     end
 
 
@@ -48,13 +48,16 @@ module CucumberLint
     def inconsistent_table_whitespace
       return unless @config.consistent_table_whitespace.enabled
 
-      if @config.fix
-        @rows.each_with_index.map do |row, index|
-          add_fix row.line, -> (line) { line.gsub(/\|.*\|/, expected_table_lines[index]) }
-        end
-      else
-        add_error "#{@rows[0].line}: Fix table whitespace"
+      fixes = @rows.each_with_index.map do |row, index|
+        { fix: -> (line) { line.gsub(/\|.*\|/, expected_table_lines[index]) },
+          line_number: row.line }
       end
+
+      add_error(
+        fixes: fixes,
+        line_number: @rows[0].line,
+        message: 'Fix table whitespace'
+      )
     end
 
 

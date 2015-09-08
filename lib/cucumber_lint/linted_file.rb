@@ -12,36 +12,38 @@ module CucumberLint
       @lines = @content.lines
 
       @errors = []
-      @fixes = {}
-      @marked_for_deletion = false
     end
 
 
     def add_error error
-      @errors << "#{@path}:#{error}"
+      @errors << error
     end
 
 
-    def add_fix line_number, fix
-      @fixes[line_number] ||= []
-      @fixes[line_number] += Array(fix)
+    def error_messages exclude_fixes
+      errors.map do |error|
+        next if error[:fix] && exclude_fixes
+        location = @path.to_s
+        location += ":#{error[:line_number]}" if error[:line_number]
+        location + ": #{error[:message]}"
+      end.compact
     end
 
 
-    def mark_for_deletion
-      @marked_for_deletion = true
+    def resolve_lint
+      errors.empty? ? :passed : :failed
     end
 
 
-    def resolve
-      if @marked_for_deletion
+    def resolve_fix
+      if errors.empty?
+        :passed
+      elsif delete?
         delete
         :deleted
-      elsif !errors.empty? || fixable?
-        fix
-        errors.empty? ? :written : :failed
       else
-        :passed
+        fix
+        unfixable_errors? ? :failed : :written
       end
     end
 
@@ -50,15 +52,18 @@ module CucumberLint
 
 
     def apply_fixes
-      lines.each_with_index.map do |line, index|
-        line_number = index + 1
-
-        @fixes.fetch(line_number, []).each do |fix|
-          line = fix.call(line)
+      fixable_errors.each do |error|
+        fixes = error[:fixes] || [error]
+        fixes.each do |fix|
+          index = fix[:line_number] - 1
+          lines[index] = fix[:fix].call lines[index]
         end
-
-        line
       end
+    end
+
+
+    def delete?
+      errors.count == 1 && errors[0][:fix] == :delete
     end
 
 
@@ -68,11 +73,18 @@ module CucumberLint
 
 
     def fix
-      IO.write @path, apply_fixes.join
+      apply_fixes
+      IO.write @path, lines.join
     end
 
-    def fixable?
-      !@fixes.empty?
+
+    def fixable_errors
+      errors.select { |error| error.key?(:fix) || error.key?(:fixes) }
+    end
+
+
+    def unfixable_errors?
+      errors.length != fixable_errors.length
     end
 
   end
