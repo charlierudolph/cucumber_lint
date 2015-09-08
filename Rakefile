@@ -1,9 +1,5 @@
 desc 'Run all linters and specs'
-task default: %w(lint features)
-
-
-desc 'Run all linters and specs'
-task lint: %w(lint:ruby lint:cucumber)
+task default: %w(lint:ruby features lint:cucumber)
 
 
 desc 'Run ruby linters'

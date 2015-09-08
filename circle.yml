@@ -1,3 +1,5 @@
 test:
   override:
-    - bundle exec rake
+    - bundle exec rake lint:ruby
+    - bundle exec rake features
+    - bundle exec rake lint:cucumber
