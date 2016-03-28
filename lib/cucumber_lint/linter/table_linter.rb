@@ -1,6 +1,6 @@
 require 'core_ext/string'
-require 'gherkin/formatter/pretty_formatter'
 require 'stringio'
+require 'terminal-table'
 
 module CucumberLint
   # A linter for a series of table rows (as parsed by Gherkin)
@@ -28,7 +28,7 @@ module CucumberLint
 
       add_error(
         fix: -> (line) { line.split('|', -1).map(&@header_style).join('|') },
-        line_number: @rows[0].line,
+        line_number: @rows[0].location.line,
         message: "#{@header_style} table headers"
       )
     end
@@ -50,30 +50,28 @@ module CucumberLint
 
       fixes = @rows.each_with_index.map do |row, index|
         { fix: -> (line) { line.gsub(/\|.*\|/, expected_table_lines[index]) },
-          line_number: row.line }
+          line_number: row.location.line }
       end
 
       add_error(
         fixes: fixes,
-        line_number: @rows[0].line,
+        line_number: @rows[0].location.line,
         message: 'Fix table whitespace'
       )
     end
 
 
     def determine_actual_table_lines
-      @rows.map { |row| @linted_file.lines[row.line - 1].strip }
+      @rows.map { |row| @linted_file.lines[row.location.line - 1].strip }
     end
 
 
     def determine_expected_table_lines
       @rows.each { |row| row.comments = [] }
 
-      io = StringIO.new
-      formatter = Gherkin::Formatter::PrettyFormatter.new(io, false, false)
-      formatter.table(@rows)
-      formatter.done
-      io.string.lines.map(&:strip)
+      table = Terminal::Table.new style: { border_x: '', border_i: '' }
+      table.rows = @rows.map { |row| row.cells.map(&:value) }
+      table.to_s.strip.split("\n")
     end
 
 

@@ -14,8 +14,8 @@ module CucumberLint
 
     def lint
       @steps.each do |step|
-        step.name.scan(/<.+?>/).each do |placeholder|
-          inconsistent_placeholder step.line, placeholder if bad_placeholder? placeholder
+        step.text.scan(/<.+?>/).each do |placeholder|
+          inconsistent_placeholder step.location.line, placeholder if bad_placeholder? placeholder
         end
       end
     end
