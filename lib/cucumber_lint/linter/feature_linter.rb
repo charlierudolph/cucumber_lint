@@ -50,8 +50,8 @@ module CucumberLint
 
 
     def lint_steps steps
-      linter = StepsLinter.new linter_options.merge(steps: steps)
-      linter.lint
+      linter = StepsLinter.new linter_options
+      linter.lint steps
     end
 
 

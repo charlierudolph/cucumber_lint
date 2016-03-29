@@ -2,16 +2,9 @@ module CucumberLint
   # A linter for a series of steps (as parsed by Gherkin)
   class StepsLinter < Linter
 
-    def initialize steps:, config:, linted_file:
-      super config: config, linted_file: linted_file
-
-      @steps = steps
-    end
-
-
-    def lint
-      lint_keywords
-      lint_tables
+    def lint steps
+      lint_keywords steps
+      lint_tables steps
     end
 
 
@@ -36,8 +29,8 @@ module CucumberLint
     end
 
 
-    def lint_tables
-      @steps.each do |step|
+    def lint_tables steps
+      steps.each do |step|
         if step.argument && step.argument.type == :DataTable
           lint_table step.argument.rows
         end
@@ -45,10 +38,10 @@ module CucumberLint
     end
 
 
-    def lint_keywords
+    def lint_keywords steps
       previous_keyword = nil
 
-      @steps.each do |step|
+      steps.each do |step|
         current_keyword = step.keyword.strip
 
         if STEP_TYPES.include?(current_keyword) && current_keyword == previous_keyword
