@@ -1,5 +1,5 @@
 desc 'Run all linters and specs'
-task default: %w(lint:ruby features lint:cucumber)
+task default: %w(lint:ruby test:unit test:feature test:self)
 
 
 desc 'Run ruby linters'
@@ -8,15 +8,21 @@ task 'lint:ruby' do
 end
 
 
-desc 'Run cucumber linters'
-task 'lint:cucumber' do
-  sh 'bundle exec cucumber_lint'
+desc 'Run feature tests'
+task 'test:feature' do
+  sh 'bundle exec cucumber -f progress'
 end
 
 
-desc 'Run features'
-task :features do
-  sh 'bundle exec cucumber -f progress'
+desc 'Run unit tests'
+task 'test:unit' do
+  sh 'bundle exec rspec'
+end
+
+
+desc 'Run self test'
+task 'test:self' do
+  sh 'bundle exec cucumber_lint'
 end
 
 

@@ -1,8 +1,5 @@
-require 'core_ext/array'
-require 'core_ext/basic_object'
-require 'core_ext/hash'
+require 'core_ext/to_open_struct'
 require 'gherkin/parser'
-require 'stringio'
 
 module CucumberLint
   # A linter for a given feature (represented by a filename)
