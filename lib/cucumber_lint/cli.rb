@@ -81,7 +81,7 @@ module CucumberLint
 
 
     def file_counts
-      [:passed, :written, :deleted, :failed].map do |status|
+      [:passed, :written, :failed].map do |status|
         if status == :passed || @results[status] > 0
           "#{@results[status]} #{status}".colorize(output_color_for status)
         end
