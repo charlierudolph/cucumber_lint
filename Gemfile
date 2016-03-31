@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 if ENV['RUBY_TYPE'] == 'JRUBY'
-  ruby '2.3.0', engine: 'jruby', engine_version: '9.0.5.0'
+  ruby '2.2.3', engine: 'jruby', engine_version: '9.0.5.0'
 else
   ruby '2.3.0'
 end
