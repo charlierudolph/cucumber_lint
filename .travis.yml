@@ -3,3 +3,5 @@ language: ruby
 rvm:
   - ruby-2.3.0
   - jruby-9.0.5.0
+
+sudo: false
