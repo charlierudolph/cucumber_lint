@@ -1,5 +1,3 @@
 test:
   override:
-    - rake lint:ruby
-    - rake features
-    - rake lint:cucumber
+    - rake
