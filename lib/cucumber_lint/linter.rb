@@ -12,10 +12,5 @@ module CucumberLint
       @linted_file.add_error(*args)
     end
 
-
-    def add_fix *args
-      @linted_file.add_fix(*args)
-    end
-
   end
 end
