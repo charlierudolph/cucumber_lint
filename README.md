@@ -48,9 +48,6 @@ Override the [default config](./config/default.yml) to disable a rule or change 
   |Carrot|Charlie|         |  Carrot| Charlie      |       | Carrot    | Charlie  |
   ```
 
-##### no_empty_features
-* empty `.feature` files are not allowed
-
 
 ##### no_repeating_keywords
 * Use `And` instead of repeating `Given`, `When`, or `Then`

@@ -6,13 +6,20 @@ module CucumberLint
       super config: config, linted_file: linted_file
 
       @feature = feature
-      @description = feature.description
     end
 
 
     def lint
-      lint_description
-      lint_elements
+      return unless @feature.scenarioDefinitions
+
+      expected_element_start = nil
+      @feature.scenarioDefinitions.each do |element|
+        if expected_element_start
+          resolve_empty_line_difference element_start(element), expected_element_start
+        end
+        lint_scenario_outline_and_examples element if element.type == :ScenarioOutline
+        expected_element_start = element_end(element) + config_value(:between_elements) + 1
+      end
     end
 
 
@@ -25,8 +32,8 @@ module CucumberLint
 
 
     def element_end element
-      if element.type == 'scenario_outline'
-        element.examples.last.rows.last.line
+      if element.type == :ScenarioOutline
+        element.examples.last.tableBody.last.location.line
       else
         step_end element.steps.last
       end
@@ -34,24 +41,11 @@ module CucumberLint
 
 
     def element_start element
-      if element.tags
-        element.tags[0].line
+      if element.tags.length > 0
+        element.tags[0].location.line
       else
-        element.line
+        element.location.line
       end
-    end
-
-
-    def expected_first_element_start
-      spacing = if @description == ''
-                  config_value(:between_feature_and_element)
-                else
-                  @description.count("\n") +
-                  config_value(:between_description_and_element) +
-                  1
-                end
-
-      @feature.line + spacing + 1
     end
 
 
@@ -69,33 +63,11 @@ module CucumberLint
     end
 
 
-    def lint_description
-      return if @description == ''
-
-      shared_lines = @feature.line + 1
-      expected_start = shared_lines + config_value(:between_feature_and_description)
-      actual_start = shared_lines + @description.match(/\n*/)[0].length
-      resolve_empty_line_difference actual_start, expected_start
-    end
-
-
-    def lint_elements
-      return unless @feature.elements
-
-      expected_element_start = expected_first_element_start
-      @feature.elements.each do |element|
-        resolve_empty_line_difference element_start(element), expected_element_start
-        lint_scenario_outline_and_examples element if element.type == 'scenario_outline'
-        expected_element_start = element_end(element) + config_value(:between_elements) + 1
-      end
-    end
-
-
     def lint_scenario_outline_and_examples element
       expected_start = step_end(element.steps.last) +
                        config_value(:between_scenario_outline_and_examples) +
                        1
-      actual_start = element.examples.first.line
+      actual_start = element.examples.first.location.line
       resolve_empty_line_difference actual_start, expected_start
     end
 
@@ -118,16 +90,20 @@ module CucumberLint
     end
 
 
-    def step_end step
-      rows = step.rows
-      doc_string = step.doc_string
+    def step_argument_end argument
+      if argument.type == :DataTable
+        argument.rows.last.location.line
+      elsif argument.type == :DocString
+        argument.location.line + argument.content.count("\n") + 2
+      end
+    end
 
-      if rows && rows.is_a?(Array)
-        rows.last.line
-      elsif doc_string
-        doc_string.line + doc_string.value.count("\n") + 2
+
+    def step_end step
+      if step.argument
+        step_argument_end step.argument
       else
-        step.line
+        step.location.line
       end
     end
 

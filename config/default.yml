@@ -1,9 +1,6 @@
 consistent_empty_lines:
   enabled: true
-  between_description_and_element: 1
   between_elements: 1
-  between_feature_and_description: 0
-  between_feature_and_element: 1
   between_scenario_outline_and_examples: 1
 
 
@@ -16,10 +13,6 @@ consistent_table_headers:
 
 
 consistent_table_whitespace:
-  enabled: true
-
-
-no_empty_features:
   enabled: true
 
 

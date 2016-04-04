@@ -17,7 +17,7 @@ module CucumberLint
 
       opts = extract_args args
       @config = load_config fix: opts[:fix]
-      @results = OpenStruct.new(total: 0, passed: 0, failed: 0, written: 0, deleted: 0, errors: [])
+      @results = OpenStruct.new(total: 0, passed: 0, failed: 0, written: 0, errors: [])
     end
 
 
@@ -81,7 +81,7 @@ module CucumberLint
 
 
     def file_counts
-      [:passed, :written, :deleted, :failed].map do |status|
+      [:passed, :written, :failed].map do |status|
         if status == :passed || @results[status] > 0
           "#{@results[status]} #{status}".colorize(output_color_for status)
         end
@@ -121,7 +121,6 @@ module CucumberLint
       when :passed then '.'
       when :failed then 'F'
       when :written then 'W'
-      when :deleted then 'D'
       end
     end
 

@@ -38,9 +38,6 @@ module CucumberLint
     def resolve_fix
       if errors.empty?
         :passed
-      elsif delete?
-        delete
-        :deleted
       else
         fix
         unfixable_errors? ? :failed : :written
@@ -59,16 +56,6 @@ module CucumberLint
           lines[index] = fix[:fix].call lines[index]
         end
       end
-    end
-
-
-    def delete?
-      errors.count == 1 && errors[0][:fix] == :delete
-    end
-
-
-    def delete
-      @path.delete
     end
 
 

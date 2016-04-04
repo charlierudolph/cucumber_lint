@@ -10,9 +10,5 @@ consistent_table_whitespace:
   enabled: false
 
 
-no_empty_features:
-  enabled: false
-
-
 no_repeating_keywords:
   enabled: false
