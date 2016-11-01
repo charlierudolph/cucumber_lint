@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'colorize', '~> 0.7.7'
   spec.add_runtime_dependency 'gherkin', '~> 2.12.2'
-  spec.add_runtime_dependency 'multi_json', '~> 1.11.2'
+  spec.add_runtime_dependency 'multi_json', '< 2.0', '>= 1.7.5'
 
   spec.files         = `git ls-files`.split("\n")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
