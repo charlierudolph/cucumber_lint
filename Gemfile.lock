@@ -1,10 +1,10 @@
 PATH
   remote: .
   specs:
-    cucumber_lint (0.1.2)
+    cucumber_lint (0.1.3)
       colorize (~> 0.7.7)
       gherkin (~> 2.12.2)
-      multi_json (~> 1.11.2)
+      multi_json (>= 1.7.5, < 2.0)
 
 GEM
   remote: http://rubygems.org/
@@ -80,4 +80,4 @@ DEPENDENCIES
   rubocop
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
